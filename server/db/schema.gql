@@ -1,0 +1,16 @@
+type Guest {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  attending: Boolean!
+}
+
+type Query {
+  guests: [Guest]
+}
+
+type Mutation {
+  addGuest(firstName: String!, lastName: String!): Guest
+  updateGuest(id: ID!, attending: Boolean!): Guest
+  deleteGuest(id: ID!): Guest
+}

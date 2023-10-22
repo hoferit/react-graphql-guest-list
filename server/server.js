@@ -3,15 +3,31 @@ const app = express();
 const cors = require('cors');
 require('dotenv').config({ path: './config.env' });
 const port = process.env.PORT || 6000;
-app.use(cors());
-app.use(express.json());
-app.use(require('./routes/record'));
-// get driver connection
-const dbo = require('./db/conn');
-app.listen(port, () => {
-  // perform a database connection when server starts
-  dbo.connectToServer(function (err) {
-    if (err) console.error(err);
-  });
-  console.log(`Server is running on port: ${port}`);
-});
+const { MongoClient } = require('mongodb'); // Import the MongoDB driver
+
+// Connect to MongoDB
+MongoClient.connect(
+  process.env.MONGO_URI,
+  { useNewUrlParser: true, useUnifiedTopology: true },
+  (err, client) => {
+    if (err) {
+      console.error('MongoDB connection error:', err);
+      process.exit(1); // Exit the application if there's an error
+    }
+    const db = client.db(); // Get the default database
+    console.log('Connected to MongoDB');
+
+    // Pass the database connection to your routes, if needed
+    app.use((req, res, next) => {
+      req.db = db;
+      next();
+    });
+
+    // Add your routes here
+    app.use(require('./routes/guests'));
+
+    app.listen(port, () => {
+      console.log(`Server is running on port: ${port}`);
+    });
+  },
+);

@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import styles from './App.module.scss';
 
 export default function App() {
-  // API Setup
-  const baseUrl = 'https://6aa40e58-63d5-4116-8244-355803782cc0.id.repl.co';
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [guests, setGuests] = useState([]);
@@ -33,7 +31,7 @@ export default function App() {
   // create user with API
   async function addGuest() {
     try {
-      const response = await fetch(`${baseUrl}/guests`, {
+      const response = await fetch('http://localhost:6000/guests', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,7 +54,7 @@ export default function App() {
   async function updateGuest(id) {
     try {
       const guestIndex = guests.findIndex((guest) => guest.id === id);
-      const response = await fetch(`${baseUrl}/guests/${id}`, {
+      const response = await fetch(`http://localhost:6000/guests/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -77,7 +75,7 @@ export default function App() {
   // delete user with API
   async function deleteGuest(id) {
     try {
-      const response = await fetch(`${baseUrl}/guests/${id}`, {
+      const response = await fetch(`http://localhost:6000/guests/${id}`, {
         method: 'DELETE',
       });
       const deletedGuest = await response.json();

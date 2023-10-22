@@ -1,19 +1,23 @@
 const { MongoClient } = require('mongodb');
-const Db = process.env.ATLAS_URI;
-const client = new MongoClient(Db);
+const { ATLAS_URI } = process.env; // Update this to use your .env variable
 
-var _db;
+let _db;
 
 module.exports = {
   connectToServer: function (callback) {
-    client.connect(function (err, db) {
-      // Verify we got a good "db" object
-      if (db) {
-        _db = db.db('Cluster0');
+    MongoClient.connect(
+      ATLAS_URI,
+      { useNewUrlParser: true, useUnifiedTopology: true },
+      function (err, client) {
+        if (err) {
+          console.error(err);
+          return callback(err);
+        }
+        _db = client.db(); // Get the default database
         console.log('Successfully connected to MongoDB.');
-      }
-      return callback(err);
-    });
+        return callback();
+      },
+    );
   },
 
   getDb: function () {
