@@ -4,7 +4,18 @@ const cors = require('cors');
 require('dotenv').config({ path: './config.env' });
 const port = process.env.PORT || 6000;
 const { MongoClient } = require('mongodb'); // Import the MongoDB driver
+const { ApolloServer } = require('apollo-server-express');
+const typeDefs = require('./db/schema');
+const queryResolvers = require('./resolvers/query');
+const mutationResolvers = require('./resolvers/mutation');
 
+const server = new ApolloServer({
+  typeDefs,
+  resolvers: [queryResolvers, mutationResolvers],
+  context: { db },
+});
+
+server.applyMiddleware({ app });
 // Connect to MongoDB
 MongoClient.connect(
   process.env.MONGO_URI,
