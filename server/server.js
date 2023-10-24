@@ -1,44 +1,44 @@
-const express = require('express');
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@apollo/server/express4';
+import { buildSubgraphSchema } from '@apollo/subgraph';
+import cors from 'cors';
+import express, { json } from 'express';
+import { readFileSync } from 'fs';
+import gql from 'graphql-tag';
+import { dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
+import resolvers from './resolvers/resolvers.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const PORT = process.env.PORT || 5050;
 const app = express();
-const cors = require('cors');
-require('dotenv').config({ path: './config.env' });
-const port = process.env.PORT || 6000;
-const { MongoClient } = require('mongodb'); // Import the MongoDB driver
-const { ApolloServer } = require('apollo-server-express');
-const typeDefs = require('./db/schema');
-const queryResolvers = require('./resolvers/query');
-const mutationResolvers = require('./resolvers/mutation');
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers: [queryResolvers, mutationResolvers],
-  context: { db },
-});
+app.use(cors());
+app.use(express.json());
 
-server.applyMiddleware({ app });
-// Connect to MongoDB
-MongoClient.connect(
-  process.env.MONGO_URI,
-  { useNewUrlParser: true, useUnifiedTopology: true },
-  (err, client) => {
-    if (err) {
-      console.error('MongoDB connection error:', err);
-      process.exit(1); // Exit the application if there's an error
-    }
-    const db = client.db(); // Get the default database
-    console.log('Connected to MongoDB');
-
-    // Pass the database connection to your routes, if needed
-    app.use((req, res, next) => {
-      req.db = db;
-      next();
-    });
-
-    // Add your routes here
-    app.use(require('./routes/guests'));
-
-    app.listen(port, () => {
-      console.log(`Server is running on port: ${port}`);
-    });
-  },
+//highlight-start
+const typeDefs = gql(
+  readFileSync(resolve(__dirname, './db/schema.graphql'), {
+    encoding: 'utf-8',
+  }),
 );
+
+const schema = buildSubgraphSchema({
+  typeDefs,
+  resolvers,
+});
+const server = new ApolloServer({
+  schema,
+});
+// Note you must call `start()` on the `ApolloServer`
+// instance before passing the instance to `expressMiddleware`
+await server.start();
+
+app.use('/graphql', cors(), json(), expressMiddleware(server));
+
+// start the Express server
+app.listen(PORT, () => {
+  console.log(`Server is running on port: ${PORT}`);
+});

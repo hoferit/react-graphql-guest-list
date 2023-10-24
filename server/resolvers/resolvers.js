@@ -1,6 +1,7 @@
-const { ObjectId } = require('mongodb');
+import { ObjectId } from 'mongodb';
+import db from '../db/conn.js';
 
-module.exports = {
+const resolvers = {
   Mutation: {
     addGuest: async (parent, { firstName, lastName }, { db }) => {
       const result = await db
@@ -25,4 +26,11 @@ module.exports = {
       return result.value;
     },
   },
+  Query: {
+    guests: async (parent, args, { db }) => {
+      return await db.collection('guests').find().toArray();
+    },
+  },
 };
+
+export default resolvers;
