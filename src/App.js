@@ -75,7 +75,7 @@ export default function App() {
   // delete user with API
   async function deleteGuest(id) {
     try {
-      const response = await fetch(`http://localhost:6000/guests/${id}`, {
+      const response = await fetch(`http://localhost:5050/guests/${id}`, {
         method: 'DELETE',
       });
       const deletedGuest = await response.json();
