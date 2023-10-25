@@ -1,7 +1,11 @@
 import { ObjectId } from 'mongodb';
-import db from '../db/conn.js';
 
 const resolvers = {
+  Query: {
+    guests: async (parent, args, { db }) => {
+      return await db.collection('guests').find().toArray();
+    },
+  },
   Mutation: {
     addGuest: async (parent, { firstName, lastName }, { db }) => {
       const result = await db
@@ -24,11 +28,6 @@ const resolvers = {
         .collection('guests')
         .findOneAndDelete({ _id: ObjectId(id) });
       return result.value;
-    },
-  },
-  Query: {
-    guests: async (parent, args, { db }) => {
-      return await db.collection('guests').find().toArray();
     },
   },
 };

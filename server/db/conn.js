@@ -18,6 +18,6 @@ try {
   );
 }
 
-let db = conn.db('sample_training');
+let db = conn.db('guests');
 
 export default db;

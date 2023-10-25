@@ -10,12 +10,11 @@ export default function App() {
 
   async function fetchGuests() {
     setIsLoading(true);
-    const response = await fetch('http://locallhost:5050/guests', {
+    const response = await fetch('http://localhost:5050/guests', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(newGuest),
     }).catch((error) => {
       window.alert(error);
       return;
