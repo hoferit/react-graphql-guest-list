@@ -1,26 +1,23 @@
-const { MongoClient } = require('mongodb');
-const { ATLAS_URI } = process.env; // Update this to use your .env variable
+import * as dotenv from 'dotenv'; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+import { MongoClient } from 'mongodb';
 
-let _db;
+dotenv.config();
 
-module.exports = {
-  connectToServer: function (callback) {
-    MongoClient.connect(
-      ATLAS_URI,
-      { useNewUrlParser: true, useUnifiedTopology: true },
-      function (err, client) {
-        if (err) {
-          console.error(err);
-          return callback(err);
-        }
-        _db = client.db(); // Get the default database
-        console.log('Successfully connected to MongoDB.');
-        return callback();
-      },
-    );
-  },
+const connectionString = process.env.ATLAS_URI || '';
 
-  getDb: function () {
-    return _db;
-  },
-};
+const client = new MongoClient(connectionString);
+
+let conn;
+try {
+  conn = await client.connect();
+} catch (e) {
+  console.error(e);
+
+  console.log(
+    `\n\nYou must set the ATLAS_URI environment variable in the .env file`,
+  );
+}
+
+let db = conn.db('sample_training');
+
+export default db;

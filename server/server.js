@@ -5,12 +5,7 @@ import cors from 'cors';
 import express, { json } from 'express';
 import { readFileSync } from 'fs';
 import gql from 'graphql-tag';
-import { dirname, resolve } from 'path';
-import { fileURLToPath } from 'url';
 import resolvers from './resolvers/resolvers.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const PORT = process.env.PORT || 5050;
 const app = express();
@@ -20,7 +15,7 @@ app.use(express.json());
 
 //highlight-start
 const typeDefs = gql(
-  readFileSync(resolve(__dirname, './db/schema.graphql'), {
+  readFileSync('./db/schema.gql', {
     encoding: 'utf-8',
   }),
 );
