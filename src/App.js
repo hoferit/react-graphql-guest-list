@@ -10,7 +10,7 @@ export default function App() {
 
   async function fetchGuests() {
     setIsLoading(true);
-    const response = await fetch('http://locallhost:6000/guests', {
+    const response = await fetch('http://locallhost:5050/guests', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ export default function App() {
   // create user with API
   async function addGuest() {
     try {
-      const response = await fetch('http://localhost:6000/guests', {
+      const response = await fetch('http://localhost:5050/guests', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ export default function App() {
   async function updateGuest(id) {
     try {
       const guestIndex = guests.findIndex((guest) => guest.id === id);
-      const response = await fetch(`http://localhost:6000/guests/${id}`, {
+      const response = await fetch(`http://localhost:5050/guests/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
