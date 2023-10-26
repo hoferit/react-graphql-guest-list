@@ -6,6 +6,7 @@
     "@apollo/client": "^3.8.6",
     "@upleveled/react-scripts": "5.0.12",
     "graphql": "^16.8.1",
+    "graphql-tag": "^2.12.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sass": "^1.69.4"

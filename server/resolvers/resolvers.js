@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb';
+import db from '../db/conn.js';
 
 const resolvers = {
   Query: {

@@ -5,6 +5,7 @@ import cors from 'cors';
 import express, { json } from 'express';
 import { readFileSync } from 'fs';
 import gql from 'graphql-tag';
+import db from './db/conn.js';
 import resolvers from './resolvers/resolvers.js';
 
 const PORT = process.env.PORT || 5050;
@@ -20,12 +21,10 @@ const typeDefs = gql(
   }),
 );
 
-const schema = buildSubgraphSchema({
+const server = new ApolloServer({
   typeDefs,
   resolvers,
-});
-const server = new ApolloServer({
-  schema,
+  context: { db },
 });
 // Note you must call `start()` on the `ApolloServer`
 // instance before passing the instance to `expressMiddleware`
