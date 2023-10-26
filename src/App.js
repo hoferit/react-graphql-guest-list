@@ -1,11 +1,4 @@
-import {
-  ApolloClient,
-  ApolloProvider,
-  gql,
-  InMemoryCache,
-  useMutation,
-  useQuery,
-} from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import styles from './App.module.scss';
 
