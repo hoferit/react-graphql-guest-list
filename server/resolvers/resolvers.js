@@ -7,7 +7,13 @@ const resolvers = {
   Query: {
     guests: async (_, args, context) => {
       const collection = await db.collection('guests');
-      return await collection.find().toArray();
+      const guestList = await collection.find().toArray();
+
+      // Map MongoDB _id to custom id field for GraphQL compatibility
+      return guestList.map((guest) => ({
+        ...guest,
+        id: guest._id.toString(), // Convert ObjectId to a string
+      }));
     },
   },
   Mutation: {
@@ -20,7 +26,12 @@ const resolvers = {
       });
 
       if (result.acknowledged) {
-        return { firstName, lastName, attending: false, id: result.insertedId };
+        return {
+          firstName,
+          lastName,
+          attending: false,
+          id: result.insertedId.toString(),
+        };
       } else {
         throw new Error('Failed to create a new guest.');
       }

@@ -50,8 +50,9 @@ export default function App() {
   const { loading, error, data } = useQuery(GET_GUESTS);
 
   useEffect(() => {
-    // Check for loading and error states, and update the local state if data is available.
-    if (!loading && !error && data) {
+    if (loading || error) {
+      setIsLoading(true);
+    } else if (data) {
       setGuests(data.guests);
       setIsLoading(false);
     }
@@ -59,6 +60,7 @@ export default function App() {
 
   async function createGuest() {
     try {
+      setIsLoading(true); // Set loading state while creating a guest
       const { data } = await createGuestMutation({
         variables: {
           firstName: firstName,
@@ -74,6 +76,8 @@ export default function App() {
       setLastName('');
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false); // Reset loading state after the mutation is done.
     }
   }
 
