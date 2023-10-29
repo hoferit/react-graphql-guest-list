@@ -10,7 +10,11 @@ type Query {
 }
 
 type Mutation {
-  createGuestMutation(firstName: String!, lastName: String!): Guest
+  createGuestMutation(
+    firstName: String!
+    lastName: String!
+    attending: Boolean!
+  ): Guest
   updateGuestMutation(id: ID!, attending: Boolean!): Guest
   deleteGuestMutation(id: ID!): Guest
 }
