@@ -1,15 +1,15 @@
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
-import { buildSubgraphSchema } from '@apollo/subgraph';
 import cors from 'cors';
 import express, { json } from 'express';
 import { readFileSync } from 'fs';
 import gql from 'graphql-tag';
-import db from './db/conn.js';
+import connectToDatabase from './db/conn.js';
 import resolvers from './resolvers/resolvers.js';
 
 const PORT = process.env.PORT || 5050;
 const app = express();
+const db = await connectToDatabase();
 
 app.use(cors());
 app.use(express.json());

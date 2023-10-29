@@ -1,5 +1,4 @@
 import { ObjectId } from 'mongodb';
-import db from '../db/conn.js';
 
 const resolvers = {
   Query: {
@@ -9,10 +8,20 @@ const resolvers = {
   },
   Mutation: {
     createGuestMutation: async (parent, { firstName, lastName }, { db }) => {
-      const result = await db
-        .collection('guests')
-        .insertOne({ firstName, lastName, attending: false });
-      return result.ops[0];
+      try {
+        const result = await db
+          .collection('guests')
+          .insertOne({ firstName, lastName, attending: false });
+
+        if (result.ops && result.ops.length > 0) {
+          return result.ops[0];
+        } else {
+          throw new Error('Failed to create a new guest.');
+        }
+      } catch (error) {
+        console.error('Error creating guest:', error);
+        throw error; // Re-throw the error for GraphQL to handle
+      }
     },
     updateGuestMutation: async (parent, { id, attending }, { db }) => {
       const result = await db

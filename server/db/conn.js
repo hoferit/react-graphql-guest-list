@@ -3,21 +3,17 @@ import { MongoClient } from 'mongodb';
 
 dotenv.config({ path: 'config.env' });
 
-const connectionString = process.env.ATLAS_URI || '';
+async function connectToDatabase() {
+  const connectionString = process.env.ATLAS_URI || '';
+  const client = new MongoClient(connectionString);
 
-const client = new MongoClient(connectionString);
-
-let conn;
-try {
-  conn = await client.connect();
-} catch (e) {
-  console.error(e);
-
-  console.log(
-    `\n\nYou must set the ATLAS_URI environment variable in the .env file`,
-  );
+  try {
+    await client.connect();
+    const db = client.db(); // Get a reference to the database
+    return db;
+  } catch (error) {
+    console.error('Database connection error:', error);
+    throw error;
+  }
 }
-
-let db = conn.db('guests');
-
-export default db;
+export default connectToDatabase;
