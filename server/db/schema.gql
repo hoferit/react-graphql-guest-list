@@ -16,5 +16,5 @@ type Mutation {
     attending: Boolean!
   ): Guest
   updateGuestMutation(id: ID!, attending: Boolean!): Guest
-  deleteGuestMutation(id: ID!): Guest
+  deleteGuestMutation(id: ID!): Boolean
 }
