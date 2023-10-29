@@ -22,7 +22,7 @@ const resolvers = {
       const result = await collection.insertOne({
         firstName,
         lastName,
-        attending: false,
+        attending: true,
       });
 
       if (result.acknowledged) {
