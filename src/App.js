@@ -52,7 +52,9 @@ export default function App() {
   const [lastName, setLastName] = useState('');
   const [guests, setGuests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [createGuestMutation] = useMutation(CREATE_GUEST);
+  const [createGuestMutation] = useMutation(CREATE_GUEST, {
+    refetchQueries: [{ query: GET_GUESTS }],
+  });
   const [updateGuestMutation] = useMutation(UPDATE_GUEST);
   const [deleteGuestMutation] = useMutation(DELETE_GUEST);
   const { loading, error, data } = useQuery(GET_GUESTS);
