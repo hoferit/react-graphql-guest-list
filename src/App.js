@@ -14,8 +14,16 @@ const GET_GUESTS = gql`
 `;
 
 const CREATE_GUEST = gql`
-  mutation CreateGuestMutation($firstName: String!, $lastName: String!) {
-    createGuestMutation(firstName: $firstName, lastName: $lastName) {
+  mutation CreateGuestMutation(
+    $firstName: String!
+    $lastName: String!
+    $attending: Boolean!
+  ) {
+    createGuestMutation(
+      firstName: $firstName
+      lastName: $lastName
+      attending: $attending
+    ) {
       id
       firstName
       lastName
@@ -65,6 +73,7 @@ export default function App() {
         variables: {
           firstName: firstName,
           lastName: lastName,
+          attending: true,
         },
       });
 
@@ -165,6 +174,9 @@ export default function App() {
       ) : (
         <section>
           {guests.map((guest) => {
+            if (!guest) {
+              return null;
+            }
             return (
               <div
                 className={styles.listItem}
