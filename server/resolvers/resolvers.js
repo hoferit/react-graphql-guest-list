@@ -42,7 +42,13 @@ const resolvers = {
       const update = await collection.updateOne(query, { $set: { attending } });
 
       if (update.acknowledged) {
-        return await collection.findOne(query);
+        const updatedGuest = await collection.findOne(query);
+        return {
+          id: updatedGuest._id, // Map the _id to id
+          firstName: updatedGuest.firstName,
+          lastName: updatedGuest.lastName,
+          attending: updatedGuest.attending,
+        };
       } else {
         return null;
       }
