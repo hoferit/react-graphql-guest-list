@@ -19,5 +19,11 @@
     "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
     "mongodb": "^6.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.10",
+    "prisma": "^5.5.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
   }
 }
